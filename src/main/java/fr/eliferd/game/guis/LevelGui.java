@@ -26,13 +26,13 @@ public class LevelGui extends AbstractGui {
 
     public LevelGui(int levelId) {
         super();
-        this.setLevel(levelId, 10000);
+        this.setLevel(levelId);
         this._shader = Game.instance().getWindow().getShader();
         this._fpsCounter = new FPSCounter();
     }
 
-    public void setLevel(int levelId, int score) {
-        this._level = new Level(levelId, LevelLoader.loadLevel(levelId), score);
+    public void setLevel(int levelId) {
+        this._level = new Level(levelId, LevelLoader.loadLevel(levelId), LevelLoader.getLevelMetadata(levelId).getScore());
     }
 
     @Override

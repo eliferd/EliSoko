@@ -49,13 +49,14 @@ public class VictoryGui extends AbstractGui {
         this.drawBackgroundLayer("assets/textures/wall2.png", 20);
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1.0f, 0.9f, 0.1f, 1.0f));
         int posX = (Game.instance().getWindow().getWidth() / 2);
-        Game.instance().getFontRenderer().drawText("YOU WIN", posX - (posX * 0.27f), 500, 8f);
+        Game.instance().getFontRenderer().drawText("LEVEL COMPLETE", posX - (posX * 0.51f), 500, 8f);
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1, 1, 1, 1));
         Game.instance().getFontRenderer().drawText("Your score : ", posX - (posX * 0.27f), 400, 3f);
+        Game.instance().getFontRenderer().drawText(String.valueOf(this._currentLevel.getCurrentScore()), (posX - (posX * 0.27f)) + 250, 400, 3f);
 
-        _nextLvlBtn.update();
-        _replayBtn.update();
-        _mainMenuBtn.update();
+        this._nextLvlBtn.update();
+        this._replayBtn.update();
+        this._mainMenuBtn.update();
 
         if (this._blinkEffect.hasStarted()) {
             this._blinkEffect.update(dt);

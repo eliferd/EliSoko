@@ -7,7 +7,6 @@ import fr.eliferd.game.levels.Level;
 
 public class Game {
     private static Game _INSTANCE = null;
-    private static int MAX_SCORE = 10000;
     private Window _window;
     private Level _lvl;
     private boolean _hasWon = false;
@@ -48,9 +47,20 @@ public class Game {
     public void handleProgress() {
         this._hasWon = this.isInGame() && this._lvl.getReachedGoalCount() >= this._lvl.getMaximumGoalCount();
         if (_hasWon) {
+            final int movementCount = this.getCurrentLevel().getPlayer().getRecordedMovementList().size();
+            this.getCurrentLevel().updateScore(this.getCurrentLevel().getCurrentScore() - (movementCount * 15));
+            this.currentScore += this.getCurrentLevel().getCurrentScore();
             this._window.navigateGui(new VictoryGui(this.getCurrentLevel()));
             this.setCurrentLevel(null);
         }
+    }
+
+    public int getTotalScore() {
+        return this.currentScore;
+    }
+
+    public void resetTotalScore() {
+        this.currentScore = 0;
     }
 
     public Window getWindow() {

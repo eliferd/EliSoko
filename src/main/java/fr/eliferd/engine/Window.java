@@ -8,10 +8,7 @@ import fr.eliferd.engine.utils.Logger;
 import fr.eliferd.engine.utils.LoggerLevel;
 import fr.eliferd.engine.utils.OpenGLDebugLayer;
 import fr.eliferd.game.Game;
-import fr.eliferd.game.guis.AbstractGui;
-import fr.eliferd.game.guis.LevelGui;
-import fr.eliferd.game.guis.MainMenuGui;
-import fr.eliferd.game.guis.VictoryGui;
+import fr.eliferd.game.guis.*;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -82,7 +79,6 @@ public class Window {
         glfwMakeContextCurrent(this._window);
 
         // Enabling V-Sync
-        // TODO Add a setting to the game in order to disable it.
         glfwSwapInterval(1);
 
         glfwShowWindow(this._window);
@@ -91,7 +87,7 @@ public class Window {
         GL.createCapabilities();
 
         // Managing debug
-        OpenGLDebugLayer.register();
+        //OpenGLDebugLayer.register();
 
         // Managing alpha bit
         glEnable(GL_BLEND);

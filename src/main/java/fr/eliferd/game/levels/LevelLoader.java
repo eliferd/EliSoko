@@ -6,21 +6,27 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class LevelLoader {
-    private static Map<Integer, String> _levelList = Map.ofEntries(
-            entry(1, "assets/levels/level1.lvl"),
-            entry(2, "assets/levels/level2.lvl"),
-            entry(3, "assets/levels/level3.lvl"),
-            entry(4, "assets/levels/level4.lvl"),
-            entry(5, "assets/levels/level5.lvl"),
-            entry(6, "assets/levels/level6.lvl"),
-            entry(7, "assets/levels/level7.lvl"),
-            entry(8, "assets/levels/level8.lvl"),
-            entry(9, "assets/levels/level9.lvl"),
-            entry(10, "assets/levels/level10.lvl")
+    private static Map<Integer, LevelMetadata> _levelList = Map.ofEntries(
+            entry(1, new LevelMetadata("assets/levels/level1.lvl", 3000)),
+            entry(2, new LevelMetadata("assets/levels/level2.lvl", 4000)),
+            entry(3, new LevelMetadata("assets/levels/level3.lvl", 2000)),
+            entry(4, new LevelMetadata("assets/levels/level4.lvl", 3500)),
+            entry(5, new LevelMetadata("assets/levels/level5.lvl", 4000)),
+            entry(6, new LevelMetadata("assets/levels/level6.lvl", 5000)),
+            entry(7, new LevelMetadata("assets/levels/level7.lvl", 2000)),
+            entry(8, new LevelMetadata("assets/levels/level8.lvl", 4000)),
+            entry(9, new LevelMetadata("assets/levels/level9.lvl", 500)),
+            entry(10, new LevelMetadata("assets/levels/level10.lvl", 2500))
     );
+
     public static String[] loadLevel(int id) {
-        return ResourceManager.getLevel(LevelLoader._levelList.get(id));
+        return ResourceManager.getLevel(LevelLoader.getLevelMetadata(id).getLevelFilePath());
     }
+
+    public static LevelMetadata getLevelMetadata(int levelId) {
+        return LevelLoader._levelList.get(levelId);
+    }
+
     public static int levelCount() {
         return LevelLoader._levelList.size();
     }

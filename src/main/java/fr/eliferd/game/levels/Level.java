@@ -21,6 +21,7 @@ public class Level {
         this._id = id;
         this._levelMap = map;
         this._maxScore = score;
+        this._currentScore = this._maxScore;
         this.generateGrid();
         Game.instance().setCurrentLevel(this);
     }
@@ -52,17 +53,20 @@ public class Level {
     }
 
     public int getCurrentScore() {
-        return this._maxScore - this._currentScore;
+        return this._currentScore;
     }
 
     public int getId() {
         return this._id;
     }
 
-    public void addScore(int amount) {
-        this._currentScore += amount;
+    public void updateScore(int score) {
+        this._currentScore = score;
         if (this._currentScore > this._maxScore) {
             this._currentScore = this._maxScore;
+        }
+        if (this._currentScore < 0) {
+            this._currentScore = 0;
         }
     }
 
