@@ -2,6 +2,7 @@ package fr.eliferd.game;
 
 import fr.eliferd.engine.Window;
 import fr.eliferd.engine.renderer.font.FontRenderer;
+import fr.eliferd.game.guis.EndGameGui;
 import fr.eliferd.game.guis.VictoryGui;
 import fr.eliferd.game.levels.Level;
 
@@ -12,7 +13,8 @@ public class Game {
     private boolean _hasWon = false;
     private boolean _isPaused = false;
     private FontRenderer _fontRenderer;
-    private int currentScore = 0;
+    private int _currentScore = 0;
+    private boolean _gameComplete = false;
     public void setWindow(Window window) {
         this._window = window;
     }
@@ -49,18 +51,27 @@ public class Game {
         if (_hasWon) {
             final int movementCount = this.getCurrentLevel().getPlayer().getRecordedMovementList().size();
             this.getCurrentLevel().updateScore(this.getCurrentLevel().getCurrentScore() - (movementCount * 15));
-            this.currentScore += this.getCurrentLevel().getCurrentScore();
-            this._window.navigateGui(new VictoryGui(this.getCurrentLevel()));
+            this._currentScore += this.getCurrentLevel().getCurrentScore();
+            if (this.getCurrentLevel().getId() < 10) {
+                this._window.navigateGui(new VictoryGui(this.getCurrentLevel()));
+            } else {
+                this._gameComplete = true;
+                this._window.navigateGui(new EndGameGui());
+            }
             this.setCurrentLevel(null);
         }
     }
 
     public int getTotalScore() {
-        return this.currentScore;
+        return this._currentScore;
+    }
+
+    public boolean isGameComplete() {
+        return this._gameComplete;
     }
 
     public void resetTotalScore() {
-        this.currentScore = 0;
+        this._currentScore = 0;
     }
 
     public Window getWindow() {

@@ -2,7 +2,6 @@ package fr.eliferd.engine.controls;
 
 import fr.eliferd.engine.input.Mouse;
 import fr.eliferd.game.Game;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -27,6 +26,7 @@ public class Button {
     private Vector4f _color;
     private Vector4f _hoverColor;
     private IClickCallback _clickHandler = null;
+    private IHoverCallback _hoverHandler = null;
     private Vector2i _textSize;
     private boolean _isDisabled = false;
 
@@ -66,6 +66,10 @@ public class Button {
 
     public void onClick(IClickCallback callback) {
         this._clickHandler = callback;
+    }
+
+    public void onHover(IHoverCallback callback) {
+        this._hoverHandler = callback;
     }
 
     public boolean isMouseOver() {
@@ -108,8 +112,13 @@ public class Button {
         }
         Game.instance().getFontRenderer().drawText(this._label, this._pos.x + (this._size.x - this._textSize.x) / 2f, this._pos.y, 4f);
 
+        if (this.isMouseOver() && this._hoverHandler != null && !this._isDisabled && !this.isClicked()) {
+            this._hoverHandler.onHover();
+        }
+
         if (this.isClicked() && this._clickHandler != null && !this._isDisabled) {
             this._clickHandler.actionPerformed();
+            Mouse.resetMouseButtonsState(); // Mark all buttons as "idle" after the click to avoid weird conflicts
         }
     }
 

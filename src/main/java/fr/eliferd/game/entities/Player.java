@@ -3,6 +3,7 @@ package fr.eliferd.game.entities;
 import fr.eliferd.engine.input.Keyboard;
 import fr.eliferd.game.Game;
 import org.joml.Vector2i;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Player extends BaseEntity {
 
     public Player() {
         this._keyCooldown = MAX_KEY_COOLDOWN;
+        this._minimapColor = new Vector4f(1, 0.973f, 0.863f, 1f);
     }
 
     private Optional<BaseEntity> getEntityAt(int posX, int posY) {

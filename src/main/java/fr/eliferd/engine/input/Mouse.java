@@ -28,6 +28,12 @@ public class Mouse {
         return buttonCode < Mouse._mouseKeyPressed.length && Mouse._mouseKeyPressed[buttonCode];
     }
 
+    public static void resetMouseButtonsState() {
+        for (int i = 0; i < Mouse._mouseKeyPressed.length; i++) {
+            Mouse._mouseKeyPressed[i] = false;
+        }
+    }
+
     public static void setInputMode(long window, MouseInputMode mim) {
         int glfwInputModeValue = -1;
         switch (mim) {

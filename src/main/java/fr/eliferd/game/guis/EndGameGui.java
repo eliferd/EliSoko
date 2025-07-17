@@ -15,7 +15,7 @@ public class EndGameGui extends AbstractGui {
     private Button _mainMenuBtn;
 
     private int _textDisplayTick = 0;
-    private final int _textDisplayTickMax = 300;
+    private final int _textDisplayTickMax = 350;
 
     @Override
     public void init() {
@@ -56,7 +56,10 @@ public class EndGameGui extends AbstractGui {
                 Game.instance().getFontRenderer().drawText("Thank you so much for playing !", posX - (posX * 0.37f), 400, 3f);
             }
             if (this._textDisplayTick > 250) {
-                Game.instance().getFontRenderer().drawText("GitHub : eliferd/EliSoko", posX - (posX * 0.37f), 350, 3f);
+                Game.instance().getFontRenderer().drawText("Level selector unlocked !", posX - (posX * 0.37f), 350, 3f);
+            }
+            if (this._textDisplayTick > 300) {
+                Game.instance().getFontRenderer().drawText("GitHub : eliferd/EliSoko", posX - (posX * 0.37f), 400, 3f);
             }
 
             if (this._textDisplayTick == this._textDisplayTickMax) {

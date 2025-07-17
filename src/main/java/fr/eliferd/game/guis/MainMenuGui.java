@@ -130,13 +130,20 @@ public class MainMenuGui extends AbstractGui{
         this._selectLvlBtn = new Button();
         this._selectLvlBtn.setSize(new Vector2i(250, 40));
         this._selectLvlBtn.setLabel("LEVELS");
+        if (!Game.instance().isGameComplete()) {
+            this._selectLvlBtn.setDisabled(true);
+            this._selectLvlBtn.setColor(new Vector4f(0.600f, 0.451f, 0.298f, 0.5f));
+        }
         this._selectLvlBtn.setPos(new Vector2i(520, 180));
+        this._selectLvlBtn.onClick(() -> {
+            Game.instance().getWindow().navigateGui(new LevelSelectorGui());
+        });
 
         this._exitBtn = new Button();
         this._exitBtn.setSize(new Vector2i(250, 40));
         this._exitBtn.setLabel("EXIT");
         this._exitBtn.setPos(new Vector2i(520, 120));
-        this._exitBtn.onClick(() ->  glfwSetWindowShouldClose(Game.instance().getWindow().currentGlfwWindowContext(), true));
+        this._exitBtn.onClick(() -> glfwSetWindowShouldClose(Game.instance().getWindow().currentGlfwWindowContext(), true));
     }
 
     private void loadSplashLogo() {

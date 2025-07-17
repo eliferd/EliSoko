@@ -79,7 +79,7 @@ public class LevelGui extends AbstractGui {
     }
 
     private void handlePause(float dt) {
-        if (Game.instance().isPaused()) {
+        if (Game.instance().isPaused() && this._pauseGui != null) {
             this._pauseGui.update(dt);
         }
 

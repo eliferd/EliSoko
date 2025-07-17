@@ -25,11 +25,17 @@ public class Render {
     private Map<Integer, Integer> vboEntityIdDictionnary = new HashMap<>();
     private Shader _shader = null;
     private int _textureSize = TILE_SIZE;
+    private boolean _disableTextures = false;
     private boolean _useLights = false;
 
     public void init(List<BaseEntity> entityList, Shader shader) {
+        this.init(entityList, shader, false);
+    }
+
+    public void init(List<BaseEntity> entityList, Shader shader, boolean disableTextures) {
         this._shader = shader;
         this.setEntityList(entityList);
+        this._disableTextures = disableTextures;
     }
 
     public void setTextureSize(int size) {
@@ -37,6 +43,10 @@ public class Render {
     }
 
     public void setEntityList(List<BaseEntity> entityList) {
+        if (entityList.isEmpty()) {
+            return;
+        }
+
         this.vboEntityIdDictionnary.clear();
         this._entityList = entityList;
         this._entityList.sort(Comparator.comparing(BaseEntity::getZIndex));
@@ -73,16 +83,25 @@ public class Render {
             FloatBuffer fb = BufferUtils.createFloatBuffer(vertices.length);
             fb.put(vertices).flip();
             glBufferData(GL_ARRAY_BUFFER, fb, GL_STATIC_DRAW);
-            glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, VBO_PCT_SIZE * Float.BYTES, 0);
-            glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, VBO_PCT_SIZE * Float.BYTES, (POS_SIZE * Float.BYTES));
-            glVertexAttribPointer(2, TEXCOORDS_SIZE, GL_FLOAT, false, VBO_PCT_SIZE * Float.BYTES, ((POS_SIZE + COLOR_SIZE) * Float.BYTES));
+            int stride = (this._disableTextures ? VBO_PC_SIZE : VBO_PCT_SIZE) * Float.BYTES;
+            glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, false, stride, 0);
+            glVertexAttribPointer(1, COLOR_SIZE, GL_FLOAT, false, stride, (POS_SIZE * Float.BYTES));
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
 
-            Texture tex = ResourceManager.getTexture(entity.getTexturePath());
+            if (!this._disableTextures) {
+                glVertexAttribPointer(2, TEXCOORDS_SIZE, GL_FLOAT, false, stride, ((POS_SIZE + COLOR_SIZE) * Float.BYTES));
+                glEnableVertexAttribArray(2);
+            }
+
+            Texture tex = null;
+
+            if (!this._disableTextures) {
+                tex = ResourceManager.getTexture(entity.getTexturePath());
+            }
+
             this._shader.uploadUniform1i("uTex", 0);
-            this._shader.uploadUniform1i("uHasTexture", 1);
+            this._shader.uploadUniform1i("uHasTexture", this._disableTextures ? 0 : 1);
 
             this._shader.uploadUniform1i("uUseLights", this._useLights ? 1 : 0);
 
@@ -93,17 +112,24 @@ public class Render {
                 this._shader.uploadUniform1f("uAmbient", 0.4f);
             }
 
-            tex.bind();
+            if (tex != null) {
+                tex.bind();
+            }
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
+
+            if (!this._disableTextures)
+                glEnableVertexAttribArray(2);
+
             glDrawArrays(GL_TRIANGLES, 0, 6);
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
+
+            if (!this._disableTextures)
+                glDisableVertexAttribArray(2);
         });
     }
 
@@ -112,9 +138,9 @@ public class Render {
     }
 
     private float[] genereateVertices(BaseEntity entity) {
-        final float[] colors = new float[] { 1, 1, 1, 1 };
+        float[] colors = new float[] { 1, 1, 1, 1 };
 
-        return new float[]{
+        float[] vertices = new float[]{
             entity.getPosX(), entity.getPosY(),                                         colors[0], colors[1], colors[2], colors[3],        0.0f, 0.0f, // bottom left
             entity.getPosX(), entity.getPosY() + this._textureSize,                     colors[0], colors[1], colors[2], colors[3],        0.0f, 1.0f, // top left
             entity.getPosX() + this._textureSize, entity.getPosY() + this._textureSize, colors[0], colors[1], colors[2], colors[3],        1.0f, 1.0f, // top right
@@ -123,5 +149,26 @@ public class Render {
             entity.getPosX() + this._textureSize, entity.getPosY(),                     colors[0], colors[1], colors[2], colors[3],        1.0f, 0.0f, // bottom right
             entity.getPosX(), entity.getPosY(),                                         colors[0], colors[1], colors[2], colors[3],        0.0f, 0.0f, // bottom left
         };
+
+        if (this._disableTextures) {
+            colors = new float[] {
+                    entity.getMinimapColor().x,
+                    entity.getMinimapColor().y,
+                    entity.getMinimapColor().z,
+                    entity.getMinimapColor().w
+            };
+
+            vertices = new float[]{
+                entity.getPosX(), entity.getPosY(),                                         colors[0], colors[1], colors[2], colors[3], // bottom left
+                entity.getPosX(), entity.getPosY() + this._textureSize,                     colors[0], colors[1], colors[2], colors[3], // top left
+                entity.getPosX() + this._textureSize, entity.getPosY() + this._textureSize, colors[0], colors[1], colors[2], colors[3], // top right
+
+                entity.getPosX() + this._textureSize, entity.getPosY() + this._textureSize, colors[0], colors[1], colors[2], colors[3], // top right
+                entity.getPosX() + this._textureSize, entity.getPosY(),                     colors[0], colors[1], colors[2], colors[3], // bottom right
+                entity.getPosX(), entity.getPosY(),                                         colors[0], colors[1], colors[2], colors[3], // bottom left
+            };
+        }
+
+        return vertices;
     }
 }

@@ -1,5 +1,7 @@
 package fr.eliferd.game.entities;
 
+import org.joml.Vector4f;
+
 public abstract class BaseEntity {
     private int _positionX;
     private int _positionY;
@@ -8,6 +10,7 @@ public abstract class BaseEntity {
     protected final int currentEntityId;
     private EntityTypeEnum _type;
     private int _zIndex;
+    protected Vector4f _minimapColor;
 
     public BaseEntity() {
         this.currentEntityId = ++_entityId;
@@ -54,5 +57,9 @@ public abstract class BaseEntity {
 
     public int getZIndex() {
         return this._zIndex;
+    }
+
+    public Vector4f getMinimapColor() {
+        return this._minimapColor;
     }
 }

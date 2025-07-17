@@ -16,12 +16,22 @@ public class Level {
     private Vector2i _playerSpawnPoint;
     private int _maxScore = 0;
     private int _currentScore = 0;
+    private int _tileSize;
+    private int _gridOffsetX;
+    private int _gridOffsetY;
 
     public Level(int id, String[] map, int score) {
+        this(id, map, score, 64, 4, 0);
+    }
+
+    public Level(int id, String[] map, int score, int tileSize, int gridOffsetX, int gridOffsetY) {
         this._id = id;
         this._levelMap = map;
         this._maxScore = score;
         this._currentScore = this._maxScore;
+        this._tileSize = tileSize;
+        this._gridOffsetX = gridOffsetX;
+        this._gridOffsetY = gridOffsetY;
         this.generateGrid();
         Game.instance().setCurrentLevel(this);
     }
@@ -71,12 +81,10 @@ public class Level {
     }
 
     private void generateGrid() {
-        int offsetX = 4; // adding an offset of 4 tiles so we center the grid.
-        int offsetY = 0;
         for (int y = 0; y < this._levelMap.length; y++) {
             for(int x = 0; x < this._levelMap[y].length(); x++) {
-                int posX = (64 * x) + (offsetX * 64);
-                int posY = (64 * y) + (offsetY * 64);
+                int posX = (this._tileSize * x) + (this._gridOffsetX * this._tileSize);
+                int posY = (this._tileSize * y) + (this._gridOffsetY * this._tileSize);
                 char currentTile = this._levelMap[y].charAt(x);
                 this.placeEntity(currentTile, posX, posY);
             }
