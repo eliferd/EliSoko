@@ -15,6 +15,7 @@ public class Game {
     private FontRenderer _fontRenderer;
     private int _currentScore = 0;
     private boolean _gameComplete = false;
+    private boolean _isTransitionInProgress = false;
     public void setWindow(Window window) {
         this._window = window;
     }
@@ -25,6 +26,10 @@ public class Game {
 
     public void setPaused(boolean isPaused) {
         this._isPaused = isPaused;
+    }
+
+    public void setTransitionInProgress(boolean transitionInProgress) {
+        this._isTransitionInProgress = transitionInProgress;
     }
 
     public Level getCurrentLevel() {
@@ -68,6 +73,10 @@ public class Game {
 
     public boolean isGameComplete() {
         return this._gameComplete;
+    }
+
+    public boolean isTransitionInProgress() {
+        return this._isTransitionInProgress;
     }
 
     public void resetTotalScore() {

@@ -61,7 +61,7 @@ public class MainMenuGui extends AbstractGui{
 
     @Override
     public void update(float dt) {
-        this.drawBackgroundLayer("assets/textures/ground.png", 20f);
+        this.drawBackgroundLayer("assets/textures/wall2.png", 20f);
         this._renderer.update(dt);
 
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1, 1, 1, 1f));
@@ -91,7 +91,7 @@ public class MainMenuGui extends AbstractGui{
         switch (tileChar) {
             case '*':
                 _type = EntityTypeEnum.WALL;
-                texturePath += "wall4.png";
+                texturePath += "wall2.png";
                 _entity = new Wall();
                 break;
             case ' ':
@@ -99,17 +99,10 @@ public class MainMenuGui extends AbstractGui{
                 texturePath += "ground.png";
                 _entity = new Ground();
                 break;
-            case 'G':
-                this.placeEntity(' ', posX, posY);
-                _type = EntityTypeEnum.GOAL;
-                texturePath += "goal2.png";
-                zIndex = 1;
-                _entity = new Goal();
-                break;
             case 'C':
                 this.placeEntity(' ', posX, posY);
                 _type = EntityTypeEnum.CRATE;
-                texturePath += "crate2.png";
+                texturePath += "crate.png";
                 _entity = new Crate();
                 zIndex = 2;
                 break;
@@ -123,9 +116,7 @@ public class MainMenuGui extends AbstractGui{
         this._playBtn.setSize(new Vector2i(250, 40));
         this._playBtn.setLabel("PLAY");
         this._playBtn.setPos(new Vector2i(520, 240));
-        this._playBtn.onClick(() -> {
-            Game.instance().getWindow().navigateGui(new LevelGui(1));
-        });
+        this._playBtn.onClick(() -> Game.instance().getWindow().navigateGui(new LevelGui(1), true));
 
         this._selectLvlBtn = new Button();
         this._selectLvlBtn.setSize(new Vector2i(250, 40));
@@ -135,9 +126,7 @@ public class MainMenuGui extends AbstractGui{
             this._selectLvlBtn.setColor(new Vector4f(0.600f, 0.451f, 0.298f, 0.5f));
         }
         this._selectLvlBtn.setPos(new Vector2i(520, 180));
-        this._selectLvlBtn.onClick(() -> {
-            Game.instance().getWindow().navigateGui(new LevelSelectorGui());
-        });
+        this._selectLvlBtn.onClick(() -> Game.instance().getWindow().navigateGui(new LevelSelectorGui()));
 
         this._exitBtn = new Button();
         this._exitBtn.setSize(new Vector2i(250, 40));

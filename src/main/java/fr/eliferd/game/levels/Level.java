@@ -107,7 +107,7 @@ public class Level {
         switch (tileChar) {
             case '*':
                 _type = EntityTypeEnum.WALL;
-                texturePath += "wall3.png";
+                texturePath += "wall.png";
                 _entity = new Wall();
                 break;
             case ' ':
@@ -125,7 +125,7 @@ public class Level {
             case 'C':
                 this.placeEntity(' ', posX, posY);
                 _type = EntityTypeEnum.CRATE;
-                texturePath += "crate2.png";
+                texturePath += "crate.png";
                 _entity = new Crate();
                 zIndex = 2;
                 break;

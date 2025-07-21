@@ -1,5 +1,7 @@
 package fr.eliferd.engine.controls;
 
+import fr.eliferd.engine.callbacks.IClickCallback;
+import fr.eliferd.engine.callbacks.IHoverCallback;
 import fr.eliferd.engine.input.Mouse;
 import fr.eliferd.game.Game;
 import org.joml.Vector2i;
@@ -107,18 +109,22 @@ public class Button {
         glDisableVertexAttribArray(1);
 
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1, 1, 1, 1));
+
         if (this._textSize == null) {
             this._textSize = Game.instance().getFontRenderer().getTextSize(this._label, 4f);
         }
+
         Game.instance().getFontRenderer().drawText(this._label, this._pos.x + (this._size.x - this._textSize.x) / 2f, this._pos.y, 4f);
 
-        if (this.isMouseOver() && this._hoverHandler != null && !this._isDisabled && !this.isClicked()) {
-            this._hoverHandler.onHover();
-        }
+        if (!Game.instance().isTransitionInProgress()) {
+            if (this.isMouseOver() && this._hoverHandler != null && !this._isDisabled && !this.isClicked()) {
+                this._hoverHandler.onHover();
+            }
 
-        if (this.isClicked() && this._clickHandler != null && !this._isDisabled) {
-            this._clickHandler.actionPerformed();
-            Mouse.resetMouseButtonsState(); // Mark all buttons as "idle" after the click to avoid weird conflicts
+            if (this.isClicked() && this._clickHandler != null && !this._isDisabled) {
+                this._clickHandler.actionPerformed();
+                Mouse.resetMouseButtonsState(); // Mark all buttons as "idle" after the click to avoid weird conflicts
+            }
         }
     }
 

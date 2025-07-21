@@ -1,12 +1,12 @@
 package fr.eliferd.engine;
 
+import fr.eliferd.engine.effects.WallTransitionEffect;
 import fr.eliferd.engine.input.Keyboard;
 import fr.eliferd.engine.input.Mouse;
 import fr.eliferd.engine.renderer.Camera;
 import fr.eliferd.engine.renderer.Shader;
 import fr.eliferd.engine.utils.Logger;
 import fr.eliferd.engine.utils.LoggerLevel;
-import fr.eliferd.engine.utils.OpenGLDebugLayer;
 import fr.eliferd.game.Game;
 import fr.eliferd.game.guis.*;
 import org.lwjgl.glfw.GLFW;
@@ -20,6 +20,7 @@ import static java.util.Map.entry;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -38,6 +39,7 @@ public class Window {
     private AbstractGui _currentGui = null;
     private Shader _shader = null;
     private Camera _camera = null;
+    private WallTransitionEffect _wallTransitionEffect;
 
     public int getWidth() {
         return this._width;
@@ -104,6 +106,8 @@ public class Window {
         // Creating the camera
         this._camera = new Camera(this._width, this._height);
 
+        this._wallTransitionEffect = new WallTransitionEffect(2);
+        this._wallTransitionEffect.setVaoID(glGenVertexArrays());
         // Display the main menu
         this.navigateGui(new MainMenuGui(this._shader));
     }
@@ -124,6 +128,10 @@ public class Window {
 
             if (dt >= 0) {
                 this._currentGui.update(dt);
+
+                if (this._wallTransitionEffect.hasStarted()) {
+                    this._wallTransitionEffect.update(dt);
+                }
             }
 
             glfwPollEvents();
@@ -155,8 +163,20 @@ public class Window {
      * @param gui
      */
     public AbstractGui navigateGui(AbstractGui gui) {
-        this._currentGui = gui;
-        this._currentGui.init();
+        return this.navigateGui(gui, false);
+    }
+
+    public AbstractGui navigateGui(AbstractGui gui, boolean withEffect) {
+        if (withEffect) {
+            this._wallTransitionEffect.setTransitionCallback(() -> {
+                this._currentGui = gui;
+                this._currentGui.init();
+            });
+            this._wallTransitionEffect.start();
+        } else {
+            this._currentGui = gui;
+            this._currentGui.init();
+        }
         return this._currentGui;
     }
 

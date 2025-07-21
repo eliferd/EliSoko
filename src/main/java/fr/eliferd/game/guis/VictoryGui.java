@@ -72,7 +72,7 @@ public class VictoryGui extends AbstractGui {
         this._nextLvlBtn.setPos(new Vector2i(posX, 300));
         this._nextLvlBtn.setSize(btnSize);
         this._nextLvlBtn.setLabel("NEXT");
-        this._nextLvlBtn.onClick(() -> Game.instance().getWindow().navigateGui(new LevelGui(this._currentLevel.getId() + 1)));
+        this._nextLvlBtn.onClick(() -> Game.instance().getWindow().navigateGui(new LevelGui(this._currentLevel.getId() + 1), true));
 
         this._replayBtn = new Button();
         this._replayBtn.setPos(new Vector2i(posX, 230));

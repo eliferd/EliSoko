@@ -1,4 +1,4 @@
-package fr.eliferd.engine.controls;
+package fr.eliferd.engine.callbacks;
 
 @FunctionalInterface()
 public interface IHoverCallback {

@@ -1,7 +1,5 @@
 package fr.eliferd.game.guis;
 import fr.eliferd.engine.controls.Button;
-import fr.eliferd.engine.input.Action;
-import fr.eliferd.engine.input.Keyboard;
 import fr.eliferd.game.Game;
 import org.joml.Vector2i;
 import org.lwjgl.BufferUtils;
@@ -43,7 +41,10 @@ public class PauseMenuGui extends AbstractGui{
         this._exitBtn.setSize(new Vector2i(width, 50));
         this._exitBtn.setPos(new Vector2i((Game.instance().getWindow().getWidth() / 2)-(width / 2), 300));
         this._exitBtn.setLabel("MAIN MENU");
-        this._exitBtn.onClick(() -> Game.instance().getWindow().navigateGui(new MainMenuGui(Game.instance().getWindow().getShader())));
+        this._exitBtn.onClick(() -> {
+            Game.instance().getWindow().navigateGui(new MainMenuGui(Game.instance().getWindow().getShader()), true);
+            Game.instance().setPaused(false);
+        });
     }
 
     @Override

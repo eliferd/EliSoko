@@ -40,7 +40,7 @@ public class EndGameGui extends AbstractGui {
 
     @Override
     public void update(float dt) {
-        this.drawBackgroundLayer("assets/textures/wall.png", 20);
+        this.drawBackgroundLayer("assets/textures/wall2.png", 20);
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1.0f, 0.9f, 0.1f, 1.0f));
         int posX = (Game.instance().getWindow().getWidth() / 2);
         if (this._textDisplayTick <= this._textDisplayTickMax) {

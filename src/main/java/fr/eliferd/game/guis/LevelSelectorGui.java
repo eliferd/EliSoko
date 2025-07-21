@@ -57,7 +57,7 @@ public class LevelSelectorGui extends AbstractGui {
 
     @Override
     public void update(float dt) {
-        this.drawBackgroundLayer("assets/textures/crate2.png", 20);
+        this.drawBackgroundLayer("assets/textures/crate.png", 20);
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1, 1, 1, 1));
         Game.instance().getFontRenderer().drawText("SELECT LEVEL", this.getCenterPosX() - (this.getCenterPosX() * 0.24f), 600, 5f);
         Game.instance().getFontRenderer().setFontColors(new Vector4f(1, 1, 1, 0.5f));
